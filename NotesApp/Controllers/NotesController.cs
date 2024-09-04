@@ -25,14 +25,16 @@ namespace NotesApp.Controllers
 
         #region GET
         [HttpGet]
-        public async Task<IActionResult> GetAllNotes(int page = 1, int pageSize = 10)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetAllNotes()
         {
             var data = await _context.Notes.ToListAsync();
-           /* var totalCount = data.Count;
-            var totalPage = (int)Math.Ceiling((decimal)totalCount / pageSize);
-            var notePerPage = data
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize).ToList();*/
+            /* int page = 1, int pageSize = 10
+             * var totalCount = data.Count;
+             var totalPage = (int)Math.Ceiling((decimal)totalCount / pageSize);
+             var notePerPage = data
+                 .Skip((page - 1) * pageSize)
+                 .Take(pageSize).ToList();*/
 
             return Ok(data);
         }
@@ -49,6 +51,9 @@ namespace NotesApp.Controllers
 
         #region POST
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> AddNote(Note note)
         {
             await _context.Notes.AddAsync(note);
@@ -59,6 +64,9 @@ namespace NotesApp.Controllers
 
         #region GETbyID
         [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetNote(int id)
         {
             var data = _context.Notes.FirstOrDefault(x => x.Id == id);
@@ -72,6 +80,8 @@ namespace NotesApp.Controllers
 
         #region PUT
         [HttpPut]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> UpdateNote(Note updateNote)
         {
             var existingNote = await _context.Notes.FirstOrDefaultAsync(x => x.Id == updateNote.Id);
@@ -92,6 +102,9 @@ namespace NotesApp.Controllers
 
         #region DELETE
         [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> DeleteNote(int id)
         {
             var data = await _context.Notes.FirstOrDefaultAsync(x => x.Id == id);
