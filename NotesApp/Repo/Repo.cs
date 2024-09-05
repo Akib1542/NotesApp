@@ -1,7 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using NotesApp.Data;
+﻿using NotesApp.Data;
 using NotesApp.Models;
-using System.Numerics;
 
 namespace NotesApp.Repo
 {
@@ -21,16 +19,15 @@ namespace NotesApp.Repo
         #region Methods
         public async Task<PaginatedList<Note>> GetNotes(int pageIndex, int pageSize)
         {
-            var players = await _context.Notes
+            var notes = _context.Notes
             .OrderBy(x => x.Id)
             .Skip((pageIndex - 1) * pageSize)
-            .Take(pageSize)
-            .ToListAsync();
+            .Take(pageSize);
 
-            var count = await _context.Notes.CountAsync();
+            var count = _context.Notes.Count();
             var totalPages = (int)Math.Ceiling(count / (double)pageSize);
 
-            return new PaginatedList<Note>(players, pageIndex, totalPages);
+            return new PaginatedList<Note>(notes, pageIndex, totalPages);
         }
         #endregion
     }

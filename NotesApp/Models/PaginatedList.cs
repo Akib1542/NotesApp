@@ -3,7 +3,7 @@
     public class PaginatedList<T>
     {
         #region Fields
-        public List<T> Items { get; }
+        public IQueryable<T> Items { get; }
         public int PageIndex { get; }
         public int TotalPage { get; }
         public bool HasPrevPage => PageIndex > 1;
@@ -11,9 +11,9 @@
         #endregion
 
         #region CTOR
-        public PaginatedList(List<T>item, int pageIndex, int totalPage)
+        public PaginatedList(IQueryable<T>items, int pageIndex, int totalPage)
         {
-            Items = item;
+            Items = items;
             PageIndex = pageIndex;
             TotalPage = totalPage;
         }
